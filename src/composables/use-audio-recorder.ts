@@ -6,9 +6,7 @@ export function useAudioRecorder() {
   const isRecording = ref(false);
   const audioUrl = ref<string | null>(null);
 
-  const audioContext = ref<AudioContext | null>(null);
   const secondsElapsed = ref<number>(0);
-  const audioDuration = ref<number>(0);
   const playbackPosition = ref<number>(0);
   const isPlaying = ref(false);
   const isInPlayingProcess = ref(false);
@@ -49,10 +47,6 @@ export function useAudioRecorder() {
         }
 
         audioElement = new Audio(audioUrl.value);
-
-        if (audioContext.value) {
-          audioContext.value.close();
-        }
       };
 
       stopTimer();
@@ -60,10 +54,6 @@ export function useAudioRecorder() {
   };
 
   const resetRecording = () => {
-    if (audioContext.value) {
-      audioContext.value.close();
-    }
-
     // Останавливаем все дорожки в mediaStream, если они есть
     if (mediaRecorder.value?.stream) {
       mediaRecorder.value.stream.getTracks().forEach(track => track.stop());
@@ -79,7 +69,9 @@ export function useAudioRecorder() {
     isRecording.value = false;
     audioUrl.value = null;
     secondsElapsed.value = 0;
-    audioDuration.value = 0;
+    isPlaying.value = false;
+    isInPlayingProcess.value = false;
+    playbackPosition.value = 0;
 
     stopTimer();
   };
