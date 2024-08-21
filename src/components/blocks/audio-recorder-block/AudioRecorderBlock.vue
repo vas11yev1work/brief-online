@@ -33,6 +33,12 @@
       </div>
       <span v-if="!isPlaying && !isInPlayingProcess" class="flex w-14 justify-end">{{ formattedElapsedTime }}</span>
       <span v-if="isPlaying || isInPlayingProcess" class="flex w-14 justify-end">{{ formattedPlaybackTime }}</span>
+      <button v-if="isPlaying || isInPlayingProcess" class="flex size-8 items-center justify-center" @click="seek(-5)">
+        <Undo class="size-5" />
+      </button>
+      <button v-if="isPlaying || isInPlayingProcess" class="flex size-8 items-center justify-center" @click="seek(5)">
+        <Redo class="size-5" />
+      </button>
       <button v-if="!isRecording && audioUrl" class="flex size-8 items-center justify-center" @click="resetRecording">
         <Trash class="size-5" />
       </button>
@@ -43,7 +49,7 @@
 <script setup lang="ts">
 import BlockWrapper from '@/components/blocks/block-wrapper/BlockWrapper.vue';
 import { useAudioRecorder } from '@/composables/use-audio-recorder.ts';
-import { Mic, CircleStop, CirclePlay, Trash } from 'lucide-vue-next';
+import { Mic, CircleStop, CirclePlay, Trash, Undo, Redo } from 'lucide-vue-next';
 
 defineProps<{
   title: string;
@@ -63,5 +69,6 @@ const {
   isPlaying,
   playbackPercent,
   isInPlayingProcess,
+  seek,
 } = useAudioRecorder();
 </script>

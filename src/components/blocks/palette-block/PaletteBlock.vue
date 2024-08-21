@@ -58,7 +58,7 @@ const props = defineProps<{
   palettes: { id: number; palette: string[] }[];
 }>();
 
-const [emblaRef, emblaApi] = emblaCarouselVue({ loop: false });
+const [emblaRef, emblaApi] = emblaCarouselVue({ loop: true });
 
 const selectedItems = ref<number[]>([]);
 

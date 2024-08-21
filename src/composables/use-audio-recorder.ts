@@ -41,7 +41,7 @@ export function useAudioRecorder() {
         const audioBlob = new Blob(audioChunks.value, { type: 'audio/wav' });
         audioUrl.value = URL.createObjectURL(audioBlob);
 
-        // Останавливаем все дорожки, чтобы выключитьА  микрофон
+        // Останавливаем все дорожки, чтобы выключить микрофон
         if (mediaRecorder.value?.stream) {
           mediaRecorder.value.stream.getTracks().forEach(track => track.stop());
         }
@@ -133,6 +133,18 @@ export function useAudioRecorder() {
     return (playbackPosition.value / secondsElapsed.value) * 100;
   });
 
+  const seek = (seconds: number) => {
+    if (audioElement) {
+      let newPosition = audioElement.currentTime + seconds;
+
+      // Ограничиваем значение, чтобы оно не выходило за рамки длины записи
+      newPosition = Math.max(0, Math.min(newPosition, secondsElapsed.value));
+
+      audioElement.currentTime = newPosition;
+      playbackPosition.value = Math.floor(newPosition);
+    }
+  };
+
   onUnmounted(() => {
     resetRecording();
   });
@@ -151,5 +163,6 @@ export function useAudioRecorder() {
     isPlaying,
     playbackPercent,
     isInPlayingProcess,
+    seek,
   };
 }
